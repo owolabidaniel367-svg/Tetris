@@ -1,0 +1,33 @@
+body {
+     background-color: gray;
+
+overflow: hidden;
+padding: 0px;
+margin: 0%;
+}
+#gameBoard {
+    
+    position:absolute;
+    bottom: 0%;
+    width: 60vh;
+    height: 100vh;
+    border: 1px solid black;
+    transform: translateX(-50%);
+   left:50%;
+   display: flex;
+
+}
+.Board {
+background-color: black;
+    /* border-top-left-radius: 40px;
+    border-top-right-radius: 40px; */
+}
+#infoBar {
+    position: absolute;
+    top: 2%;
+    width: 100vw;
+    height: 7%;
+    border-radius: 40px;
+
+
+}
