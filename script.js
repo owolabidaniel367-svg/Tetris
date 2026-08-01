@@ -348,10 +348,10 @@ game_board.addEventListener("touchstart", (event)=>{
 
     let touchY = touch.clientY - rect.top;
     let touchX = touch.clientX - rect.left;
+    let Heightboundary = 3(rect.height/4)
 
-
-    // lower half of screen = soft drop
-    if(touchY > rect.height / 2){
+    // quater half of screen = soft drop
+    if(touchY > Heightboundary){
 
         keyDown = true;
 
