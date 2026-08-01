@@ -1,25 +1,30 @@
-# TETRIS GAME
+# Tetris
+
+A simple Tetris clone built from scratch using vanilla JavaScript, HTML, and CSS.
 
 ## Features
 
-A basic Tetris game built completely from scratch. It implements the core gameplay and logic of a classic Tetris game.
+- Falling tetrominoes
+- Collision detection
+- Line clearing
+- Keyboard controls
+- Touch controls for mobile
+- Matrix-based game logic
 
-## Languages
+## Tech Stack
 
 - HTML
-- JavaScript
 - CSS
+- JavaScript
 
-## Side Note
+## Notes
 
-I don't really enjoy programming, and I still feel like a child at heart. But what other way is there to make sense of a Computer Science degree if you're like me? 🙃
+This project wasn't about making the next great Tetris clone. It was an excuse to build something from first principles and understand how the game actually works.
 
-I enjoy making games that are fun to play and involve puzzle-solving.
+I spend most of my reading about algorithms, mathematics, and computer science, so building games is a nice change of pace. Puzzle games have always been the most interesting to me because they turn simple rules into surprisingly complex behavior.
 
-Let's see where this takes meeeee.
+There are still plenty of things I'd like to improve, but for now I'm calling this version done.
 
 ## Author
-
-Yours truly,
 
 **Owolabi Daniel**
