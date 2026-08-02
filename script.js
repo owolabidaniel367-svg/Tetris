@@ -1,9 +1,12 @@
 const info_board = document.getElementById("infoBoard")
 const game_board = document.getElementById("gameBoard")
 const rect = game_board.getBoundingClientRect();
+const score_board = document.getElementById("scoreboard")
 let Block_height = (rect.height/15)
 let Block_width = (rect.width/9)
 let InactiveBlocks = []
+let score = 0
+let validRows = []
 const colors = [
     "#FF3B30", // Bright Red
     "#FF9500", // Bright Orange
@@ -24,10 +27,10 @@ const blockmat = {
 
     // A - I Piece (4×4)
     A: [
-        [0,0,0,0],
-        [1,1,1,1],
-        [0,0,0,0],
-        [0,0,0,0]
+        [0,0,1,0],
+        [0,0,1,0],
+        [0,0,1,0],
+        [0,0,1,0]
     ],
 
     // B - O Piece (2×2)
@@ -69,7 +72,8 @@ const blockmat = {
         [1,1,0],
         [0,1,1],
         [0,0,0]
-    ]
+    ],
+    H: [[1]]
 
 };
 let Game_Matrix = []
@@ -106,12 +110,21 @@ class Block {
         this.block.style.left = `${this.x * Block_width}px`
         this.block.style.top = `${this.y *(Block_height)}px`
     }
+    destroy(){
+        let index = InactiveBlocks.indexOf(this)
+        if(index !== -1){
+            InactiveBlocks.splice(index,1)
+        }
+        this.block.remove()
+         Game_Matrix[this.y][this.x] = 0;
+    }
     update(){
         this.y += 1
 this.block.style.top = `${this.y * Block_height}px`
 
 
     }
+
   
    
 }
@@ -273,7 +286,9 @@ move(currentTime) {
         } else {
 
             this.replace();
+            checkblocks()
             remove();
+            
             return; 
 
         }
@@ -302,11 +317,13 @@ return block
 }
 function remove() {
     block = null
-    const alphabet = {1:"A", 2:"B", 3:"C",4:"D",5:"E",6:"F",7:"G"}
+    const alphabet = {1:"A", 2:"B", 3:"C",4:"D",5:"E",6:"F",7:"G",8:"H"}
+    let num = Math.floor((Math.random() * 8) + 1)
     block = new BlockA(
         Math.floor(Math.random() * 5),
         colors[Math.floor(Math.random() * colors.length)],
-        blockmat[alphabet[Math.floor((Math.random() * 7) + 1)]]
+        
+        blockmat[alphabet[num]]
     );
      block.create()
    requestAnimationFrame(block.move.bind(block));
@@ -406,7 +423,54 @@ game_board.addEventListener("touchstart", (event) => {
     touchStartY = touch.clientY;
 
 });
+function checkblocks(){
+    validRows = []
+    for (let i = 0; i < 15; i++) {
+        let count = 0
+        for (let j = 0; j < 9; j++) {
+            
+           if(Game_Matrix[i][j] !== 1){
+            break
+           }
+           count++
 
+        }
+        if(count === 9){
+             validRows.push(i)
+        }
+        
+    }
+    if(validRows.length == 0) return
+    for (let index = 0; index < validRows.length; index++){
+        clearRow(validRows[index])
+        score++
+
+    }
+    score_board.innerHTML = score
+
+    
+}
+function clearRow(row){
+     [...InactiveBlocks].forEach(block=>{
+        if(block.y === row){
+            block.destroy()
+
+        }
+     })
+     
+     InactiveBlocks.forEach(block=>{
+        if(block.y<row){
+            block.y += 1
+            block.block.style.top = `${block.y * Block_height}px`
+
+        }
+     })
+     Game_Matrix = Array.from({length:15},()=>Array(9).fill(0));
+         InactiveBlocks.forEach(block=>{
+        Game_Matrix[block.y][block.x] = 1;
+    });
+
+}
 
 game_board.addEventListener("touchend", (event) => {
 

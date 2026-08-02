@@ -25,8 +25,19 @@ margin: 0%;
      height:100%;
      width:100%;
 }
+#scoreboard {
+    position: absolute;
+    top: 2%;
+    left:3%;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 20px;
+    color: white;
+    z-index: 2;
+   
+}
 
 #gameBoard {
+    touch-action: none;
     position: absolute;
     left: 50%;
     top: 50%;
