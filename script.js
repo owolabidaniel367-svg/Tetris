@@ -347,45 +347,119 @@ document.addEventListener("keyup", (event)=>{
 
 });
 // Screen-touch 
-game_board.addEventListener("touchstart", (event)=>{
+// game_board.addEventListener("touchstart", (event)=>{
+
+//     event.preventDefault();
+
+//     let touch = event.touches[0];
+
+//     // position of finger relative to the game board
+//     let rect = game_board.getBoundingClientRect();
+
+//     let touchY = touch.clientY - rect.top;
+//     let touchX = touch.clientX - rect.left;
+//     let Heightboundary = 3*(rect.height/4)
+
+//     // quater half of screen = soft drop
+//     if(touchY > Heightboundary){
+
+//         keyDown = true;
+
+//     }
+
+//     else{
+
+//         if(touchX < rect.width / 2){
+
+//             block.moveHorizontal(-1);
+
+//         }
+//         else{
+
+//             block.moveHorizontal(1);
+
+//         }
+
+//     }
+
+// });
+// game_board.addEventListener("touchend", ()=>{
+
+//     keyDown = false;
+
+// });
+
+
+let touchStartX = 0;
+let touchStartY = 0;
+
+let touchEndX = 0;
+let touchEndY = 0;
+
+game_board.addEventListener("touchstart", (event) => {
 
     event.preventDefault();
 
     let touch = event.touches[0];
 
-    // position of finger relative to the game board
-    let rect = game_board.getBoundingClientRect();
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
 
-    let touchY = touch.clientY - rect.top;
-    let touchX = touch.clientX - rect.left;
-    let Heightboundary = 3*(rect.height/4)
+});
 
-    // quater half of screen = soft drop
-    if(touchY > Heightboundary){
 
-        keyDown = true;
+game_board.addEventListener("touchend", (event) => {
 
-    }
+    event.preventDefault();
 
-    else{
+    let touch = event.changedTouches[0];
 
-        if(touchX < rect.width / 2){
+    touchEndX = touch.clientX;
+    touchEndY = touch.clientY;
 
-            block.moveHorizontal(-1);
 
-        }
-        else{
+    let swipeX = touchEndX - touchStartX;
+    let swipeY = touchEndY - touchStartY;
 
+
+    let threshold = 30; // minimum swipe distance
+
+
+    // Horizontal swipe
+    if(Math.abs(swipeX) > Math.abs(swipeY)){
+
+        if(swipeX > threshold){
+
+            // swipe right
             block.moveHorizontal(1);
 
         }
 
+        else if(swipeX < -threshold){
+
+            // swipe left
+            block.moveHorizontal(-1);
+
+        }
+
     }
 
-});
-game_board.addEventListener("touchend", ()=>{
 
-    keyDown = false;
+    // Vertical swipe
+    else{
+
+        if(swipeY > threshold){
+
+            // swipe down = faster falling
+            keyDown = true;
+
+            setTimeout(()=>{
+                keyDown = false;
+            },200);
+
+        }
+
+    }
 
 });
 
