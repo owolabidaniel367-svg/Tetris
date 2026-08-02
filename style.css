@@ -1,4 +1,4 @@
-body {
+/* body {
      background-color: gray;
 
 overflow: hidden;
@@ -16,6 +16,23 @@ margin: 0%;
    left:50%;
    display: flex;
 
+} */
+ body {
+    margin: 0;
+    overflow: hidden;
+     background-color: gray;
+}
+
+#gameBoard {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+
+    height: 100dvh;
+    aspect-ratio: 9 / 15;
+
+    transform: translateX(-50%);
+    border: 1px solid black;
 }
 .Board {
 background-color: black;
