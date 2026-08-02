@@ -17,21 +17,23 @@ margin: 0%;
    display: flex;
 
 } */
+ html,
  body {
     margin: 0;
    overflow-x: hidden;
      background-color: gray;
+     height:100%;
+     width:100%;
 }
 
 #gameBoard {
     position: absolute;
     left: 50%;
-    bottom: 0;
-
-    width: min(90vw, 60vh);
-    aspect-ratio: 9 / 15;
-
-    transform: translateX(-50%);
+    top: 50%;
+   
+    height: 80vh;
+    width: 48vh;
+transform: translate(-50%,-50%);
 
     border: 1px solid black;
     background: black;
