@@ -28,11 +28,10 @@ margin: 0%;
     left: 50%;
     bottom: 0;
 
-    height: 100dvh;
-    aspect-ratio: 9 / 15;
+    width: min(60vh, 100vw);
+    height: min(100vh, calc(100vw * 15 / 9));
 
     transform: translateX(-50%);
-    border: 1px solid black;
 }
 .Board {
 background-color: black;
