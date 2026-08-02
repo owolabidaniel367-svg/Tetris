@@ -1,8 +1,9 @@
 const info_board = document.getElementById("infoBoard")
 const game_board = document.getElementById("gameBoard")
 const rect = game_board.getBoundingClientRect();
-const Block_height = (rect.height/15)
-const Block_width = (rect.width/9)
+let Block_height = (rect.height/15)
+let Block_width = (rect.width/9)
+let InactiveBlocks = []
 const colors = [
     "#FF3B30", // Bright Red
     "#FF9500", // Bright Orange
@@ -11,6 +12,12 @@ const colors = [
     "#0A84FF", // Bright Blue
     "#BF5AF2"  // Bright Purple
 ];
+function updateBoardSize(){
+    const rect = game_board.getBoundingClientRect();
+ Block_height = (rect.height/15)
+ Block_width = (rect.width/9)
+}
+
 let keyDown = false
 this.Aray = []
 const blockmat = {
@@ -46,14 +53,14 @@ const blockmat = {
     // E - J Piece (3×3)
     E: [
         [0,0,1],
-        [0,0,1],
+        [0,0,1],                                           
         [0,1,1]
     ],
 
     // F - S Piece (3×3)
     F: [
         [0,1,1],
-        [1,1,0],
+        [1,1,0],                                             
         [0,0,0]
     ],
 
@@ -96,12 +103,12 @@ class Block {
         this.block.style.backgroundColor = this.color
         this.block.style.height = `${Block_height}px`
         this.block.style.width = `${Block_width}px`
-        this.block.style.left = `${this.x}px`
-        this.block.style.top = `${this.y}px`
+        this.block.style.left = `${this.x * Block_width}px`
+        this.block.style.top = `${this.y *(Block_height)}px`
     }
     update(){
-        this.y += Block_height
-this.block.style.top = `${this.y}px`
+        this.y += 1
+this.block.style.top = `${this.y * Block_height}px`
 
 
     }
@@ -125,8 +132,8 @@ class BlockA {
 for (let i = 0; i < this.size; i++) {
              for (let j = 0; j < this.size; j++) {
                if (this.mat[i][j] == 0) {continue}
-               const pixel = new Block(this.x + (Block_width*j),
-                                (Block_height*i),
+               const pixel = new Block(this.xpos + (j),
+                                (i),
                                 this.color)
                 this.blocks.push(pixel)
              }
@@ -192,6 +199,9 @@ replace() {
        }
         
     }
+    this.blocks.forEach(block=>{
+        InactiveBlocks.push(block)
+    })
 }
 
  moveHorizontal(dir){
@@ -227,8 +237,8 @@ replace() {
 
     // update visual blocks
     this.blocks.forEach(block=>{
-        block.x += dir * Block_width
-        block.block.style.left = `${block.x}px`
+        block.x += dir
+        block.block.style.left = `${block.x*Block_width}px`
     })
 
 
@@ -296,7 +306,7 @@ function remove() {
     block = new BlockA(
         Math.floor(Math.random() * 5),
         colors[Math.floor(Math.random() * colors.length)],
-        blockmat[alphabet[Math.floor((Math.random() * 6)+1)]]
+        blockmat[alphabet[Math.floor((Math.random() * 7) + 1)]]
     );
      block.create()
    requestAnimationFrame(block.move.bind(block));
@@ -348,7 +358,7 @@ game_board.addEventListener("touchstart", (event)=>{
 
     let touchY = touch.clientY - rect.top;
     let touchX = touch.clientX - rect.left;
-    let Heightboundary = 3(rect.height/4)
+    let Heightboundary = 3*(rect.height/4)
 
     // quater half of screen = soft drop
     if(touchY > Heightboundary){
@@ -388,5 +398,27 @@ document.addEventListener("keydown", (event)=>{
         keyDown = true;
 
     }
+
+});
+window.addEventListener("resize", () => {
+
+    updateBoardSize();
+
+    block.blocks.forEach(pixel => {
+
+        pixel.block.style.width = `${Block_width}px`;
+        pixel.block.style.height = `${Block_height}px`;
+
+        pixel.block.style.left = `${pixel.x * Block_width}px`;
+        pixel.block.style.top = `${pixel.y * Block_height}px`;
+
+    });
+    InactiveBlocks.forEach(pixel=>{
+         pixel.block.style.width = `${Block_width}px`;
+        pixel.block.style.height = `${Block_height}px`;
+
+        pixel.block.style.left = `${pixel.x * Block_width}px`;
+        pixel.block.style.top = `${pixel.y * Block_height}px`;
+    })
 
 });
