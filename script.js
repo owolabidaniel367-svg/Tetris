@@ -2,11 +2,15 @@ const info_board = document.getElementById("infoBoard")
 const game_board = document.getElementById("gameBoard")
 const rect = game_board.getBoundingClientRect();
 const score_board = document.getElementById("scoreboard")
+const button = document.getElementById("butt")
+const Gameover_board = document.getElementById("gamOver")
 let Block_height = (rect.height/15)
 let Block_width = (rect.width/9)
 let InactiveBlocks = []
 let score = 0
 let validRows = []
+let ranX
+let block
 const colors = [
     "#FF3B30", // Bright Red
     "#FF9500", // Bright Orange
@@ -14,7 +18,9 @@ const colors = [
     "#30D158", // Bright Green
     "#0A84FF", // Bright Blue
     "#BF5AF2"  // Bright Purple
+
 ];
+button.onclick = startgame
 function updateBoardSize(){
     const rect = game_board.getBoundingClientRect();
  Block_height = (rect.height/15)
@@ -118,6 +124,10 @@ class Block {
         this.block.remove()
          Game_Matrix[this.y][this.x] = 0;
     }
+    Remove(){
+        this.block.remove()
+    }
+    
     update(){
         this.y += 1
 this.block.style.top = `${this.y * Block_height}px`
@@ -142,6 +152,7 @@ class BlockA {
         this.size = this.mat.length
          this.active = true
          this.destroy = false
+         this.placehold = []
 for (let i = 0; i < this.size; i++) {
              for (let j = 0; j < this.size; j++) {
                if (this.mat[i][j] == 0) {continue}
@@ -176,15 +187,101 @@ canMovedown(){
         }
         
      }
-    // if(inside(this.count + 1)){
-    //     return true
-    // }
+    
     return true
 }
 
-checkcolision(){
+RotateMatrix(){
+  let d = this.size - 1
+  let cloneMat = []
+  for (let k = 0; k < this.size; k++) {
+      let row = []
+    for (let l = 0; l < this.size; l++) {
+        row.push(0)
+        
+    }
+    cloneMat.push(row)
+  }
+  for (let i = 0; i < this.size; i++) {
+   for (let j = 0; j < this.size; j++) {
+           cloneMat[i][j] = this.mat[j][d-i]
+   }
+    
+  }
 
+//    return cloneMat
+this.placehold = cloneMat
+
+};
+Rotate(){
+    this.RotateMatrix()
+    if(this.isRotationLegal()){
+        this.mat = this.placehold
+      this.blocks.forEach(block=>{
+         
+        block.Remove()
+      })
+      this.blocks = []
+
+      for (let i = 0; i < this.size; i++) {
+             for (let j = 0; j < this.size; j++) {
+               if (this.mat[i][j] == 0) {continue}
+               const pixel = new Block(this.xpos + (j),
+                                (this.count +i),
+                                this.color)
+                this.blocks.push(pixel)
+                pixel.create()
+             }
+            
+        }
+    }
+}
+isRotationLegal() {
+    for (let i = 0; i < this.size; i++) {
+        for (let j = 0; j < this.size; j++) {
+
+            if (this.placehold[i][j] === 0)
+                continue;
+
+            let y = this.count + i;
+            let x = this.xpos + j;
+
+            if (!inside(x, y)){
+                console.log("Illegal")
+                return false;
+                      
+            }
+            if (Game_Matrix[y][x] === 1){
+                console.log("Illegal")
+                return false;
+                
+            } 
+        }
+    }
+ console.log("Legal")
+
+    return true;
    
+}
+canspawn(){
+     for (let i = 0; i < this.size; i++) {
+        for (let j = 0; j < this.size; j++) {
+
+            if (this.mat[i][j] === 0)
+                continue;
+
+            let y = this.count + i;
+            let x = this.xpos + j;
+
+           
+            if (Game_Matrix[y][x] === 1){
+                console.log("Illegal")
+                return false;
+                
+            } 
+        }
+    }
+    return true
 }
 create(){
     this.blocks.forEach(block => {
@@ -282,6 +379,7 @@ move(currentTime) {
 
             this.count++;
             this.update();
+           
 
         } else {
 
@@ -302,32 +400,43 @@ move(currentTime) {
 }
 
 
-let block = new BlockA(2,colors[5],blockmat["E"])
+
 
 // functions that updates gamematrix 
 function create(){
 
- 
+ block = new BlockA(2,colors[5],blockmat["E"])
  
  block.create()
+ 
 requestAnimationFrame(block.move.bind(block));
 return block
 
 
 }
 function remove() {
+     
+   
     block = null
     const alphabet = {1:"A", 2:"B", 3:"C",4:"D",5:"E",6:"F",7:"G",8:"H"}
     let num = Math.floor((Math.random() * 8) + 1)
     block = new BlockA(
-        Math.floor(Math.random() * 5),
+         Math.floor((Math.random() * 5) + 1),
         colors[Math.floor(Math.random() * colors.length)],
         
         blockmat[alphabet[num]]
     );
+    if(block.canspawn()){
      block.create()
+     
    requestAnimationFrame(block.move.bind(block));
-   
+    }
+    else{
+        block = null
+       showgame()
+    }
+
+
 }
 create()
 function inside(x,y){
@@ -340,7 +449,7 @@ function inside(x,y){
 function updatemat(x,y){
 
   Game_Matrix[y][x] = 1
-  console.log(Game_Matrix)
+  
 }
 
 document.addEventListener("keydown", (event)=>{
@@ -351,6 +460,9 @@ document.addEventListener("keydown", (event)=>{
 
     if(event.key === "ArrowRight"){
         block.moveHorizontal(1)
+    }
+    if(event.key === " "){
+        block.Rotate()
     }
 
    
@@ -487,7 +599,10 @@ game_board.addEventListener("touchend", (event) => {
 
 
     let threshold = 30; // minimum swipe distance
-
+    // touch Rotate peiece
+     if(swipeX<threshold){
+     block.Rotate()
+     }     
 
     // Horizontal swipe
     if(Math.abs(swipeX) > Math.abs(swipeY)){
@@ -538,6 +653,20 @@ document.addEventListener("keydown", (event)=>{
     }
 
 });
+
+function showgame(){
+    Gameover_board.style.visibility = "visible"
+   
+}
+function startgame(){
+    Game_Matrix = Array.from({ length: 15 }, () => Array(9).fill(0));
+    InactiveBlocks.forEach(block=>{
+        block.Remove()
+    })
+    InactiveBlocks = []
+    create()
+    Gameover_board.style.visibility = "hidden"
+}
 window.addEventListener("resize", () => {
 
     updateBoardSize();

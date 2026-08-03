@@ -33,7 +33,86 @@ margin: 0%;
     font-size: 20px;
     color: white;
     z-index: 2;
+    user-select: none;
    
+}
+#gamOver{
+    position: absolute;
+    display: flex;
+    background-color: black;
+    
+    top:50%;
+    left:50%;
+    height:30%;
+    width:70%;
+    transform: translate(-50%,-50%);
+        font-family: "JetBrains Mono", monospace;
+        color:white;
+        border:2px solid #FF3B30;
+        z-index: 2 ;
+        visibility: hidden;
+
+        
+}
+#text{
+    position: absolute;
+     font-size: 120%;
+    
+    top:20%;
+    left:50%;
+    
+    
+    transform: translateX(-50%);
+}
+
+#butt{
+    position: absolute;
+    bottom: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    height: 20%;
+   
+
+    background: #FF3B30;
+    color: white;
+    border: none;
+    
+
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   border: 1px solid white;
+   
+    transition:
+        transform 0.12s ease,
+        box-shadow 0.12s ease,
+        background-color 0.2s ease;
+}
+
+#butt:hover{
+    background: #ff5147;
+}
+#butt:active{
+    transform: translateX(-50%) scale(0.96);
+    background-color: #d92d23;
+    
+}
+
+
+#highscoreboard{
+       position: absolute;
+    top: 2%;
+    right:3%;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 20px;
+    color: white;
+    z-index: 2;
+    user-select: none; 
 }
 
 #gameBoard {
