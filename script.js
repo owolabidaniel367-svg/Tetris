@@ -666,6 +666,8 @@ function startgame(){
     InactiveBlocks = []
     create()
     Gameover_board.style.visibility = "hidden"
+    score_board.innerHTML = 0
+    score = 0
 }
 window.addEventListener("resize", () => {
 
