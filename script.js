@@ -538,6 +538,7 @@ function clearRow(row){
     });
 
 }
+ function touch(){
 
 game_board.addEventListener("touchend", (event) => {
 
@@ -596,8 +597,8 @@ game_board.addEventListener("touchend", (event) => {
     }
 
 });
-
- 
+ }
+ touch()
 document.addEventListener("keydown", (event)=>{
 
     if(event.key === "ArrowDown"){
@@ -611,9 +612,12 @@ document.addEventListener("keydown", (event)=>{
 
 function showgame(){
     Gameover_board.style.visibility = "visible"
+    touch()
    
 }
 function startgame(){
+    game_board.clearInterval("touchend")
+    game_board.clearInterval("touchstart")
     Game_Matrix = Array.from({ length: 15 }, () => Array(9).fill(0));
     InactiveBlocks.forEach(block=>{
         block.Remove()
@@ -623,6 +627,7 @@ function startgame(){
     Gameover_board.style.visibility = "hidden"
     score_board.innerHTML = 0
     score = 0
+
 }
 window.addEventListener("resize", () => {
 
